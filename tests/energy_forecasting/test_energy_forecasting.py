@@ -6,6 +6,7 @@ from energy_forecasting.weather.mock import generate_mock_weather
 from energy_forecasting.wind import forecast_wind_power
 from energy_forecasting.config import create_skystream_turbine
 from energy_forecasting.energy import power_to_energy
+from energy_forecasting.pipeline import run_energy_forecast
 
 
 def test_mock_weather_generation():
@@ -99,3 +100,25 @@ def test_power_to_energy_rejects_invalid_interval(interval_minutes):
 
     with pytest.raises(ValueError):
         power_to_energy(power, interval_minutes=interval_minutes)
+
+
+def test_energy_forecasting_pipeline():
+    weather = generate_mock_weather(
+        start="2026-06-01",
+        periods=24,
+        seed=42,
+    )
+
+    turbine = create_skystream_turbine()
+
+    forecast = run_energy_forecast(
+        weather=weather,
+        turbine=turbine,
+        interval_minutes=60,
+    )
+
+    assert len(forecast) == 24
+    assert forecast.index.equals(weather.index)
+    assert forecast.name == "wind_energy_wh"
+    assert (forecast >= 0).all()
+    assert (forecast <= 2400).all()
