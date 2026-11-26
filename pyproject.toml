@@ -11,12 +11,15 @@ dependencies = [
     "windpowerlib",
     "pandas",
     "numpy",
+    "torch",
+    "sentence-transformers",
+    "pyarrow",
+    "matplotlib",
 ]
 
 [project.optional-dependencies]
 dev = [
     "pytest",
-    "matplotlib",
 ]
 
 [tool.setuptools.packages.find]
