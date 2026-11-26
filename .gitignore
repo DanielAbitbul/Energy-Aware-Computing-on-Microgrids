@@ -11,3 +11,11 @@ __pycache__/
 .eggs/
 build/
 dist/
+
+# Generated datasets and experiment outputs
+/data/
+/models/
+/reports/
+
+# macOS metadata
+.DS_Store
